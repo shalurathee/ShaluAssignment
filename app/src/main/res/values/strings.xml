@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ShaluAssignment</string>
+
+    <string name="issue_title">Issue Title</string>
+    <string name="user_info">User Info</string>
+    <string name="no_record_found">No Record Found</string>
+
+</resources>
