@@ -16,10 +16,11 @@ import kotlinx.android.synthetic.main.layout_header.*
 
 class CommentDetailActivity : AppCompatActivity() {
 
-    lateinit var issueAdapter : CommentDetailAdapter
-    lateinit var commentList : List<CommentListModel>
-    var comment_api_url :String = ""
-    lateinit var issuesCommentViewModel : IssueCommentViewModel
+    lateinit var issueAdapter: CommentDetailAdapter
+    lateinit var commentList: List<CommentListModel>
+    var comment_api_url: String = ""
+    var issue_description: String = ""
+    lateinit var issuesCommentViewModel: IssueCommentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,53 +28,54 @@ class CommentDetailActivity : AppCompatActivity() {
         initUI()
     }
 
-    fun initUI(){
+    fun initUI() {
         rvCommentList.visibility = View.GONE
         tvNoCommentFound.visibility = View.GONE
         tvHeaderlabel.text = "Comment List"
 
-        issuesCommentViewModel = ViewModelProvider.NewInstanceFactory().create(IssueCommentViewModel::class.java)
+        issuesCommentViewModel =
+            ViewModelProvider.NewInstanceFactory().create(IssueCommentViewModel::class.java)
         comment_api_url = intent.getStringExtra(ApiConstantsUrl.COMMENT_LIST).toString()
+        issue_description = intent.getStringExtra(ApiConstantsUrl.ISSUE_DESCRIPTION).toString()
 
-      //  tvIssueDescription.text =
-            getCommentIssueList(comment_api_url)
+        tvIssueDescription.text = "Issue Description : "+issue_description
+        getCommentIssueList(comment_api_url)
 
-        ivBackIcon.setOnClickListener{
+        ivBackIcon.setOnClickListener {
             onBackPressed()
         }
     }
 
-    private fun getCommentIssueList(apiUrl:String) {
-        issuesCommentViewModel.getIssuesComment(apiUrl).observe(this,  {
+    private fun getCommentIssueList(apiUrl: String) {
+        issuesCommentViewModel.getIssuesComment(apiUrl).observe(this, {
             if (it != null) {
                 commentList = it
 
-                if (commentList.size>0){
+                if (commentList.size > 0) {
                     rvCommentList.visibility = View.VISIBLE
-                    tvNoCommentFound.visibility =View.GONE
-                }else{
+                    tvNoCommentFound.visibility = View.GONE
+                } else {
                     rvCommentList.visibility = View.GONE
-                    tvNoCommentFound.visibility =View.VISIBLE
+                    tvNoCommentFound.visibility = View.VISIBLE
                 }
-
-
                 setAdapter()
 
             } else {
                 rvCommentList.visibility = View.GONE
-                tvNoCommentFound.visibility =View.VISIBLE
+                tvNoCommentFound.visibility = View.VISIBLE
                 tvNoCommentFound.text = "Something wrong with Api Call..."
             }
 
         })
     }
 
-    private fun setAdapter(){
-        issueAdapter = CommentDetailAdapter( commentList,this)
+    private fun setAdapter() {
+        issueAdapter = CommentDetailAdapter(commentList, this)
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         rvCommentList.layoutManager = linearLayoutManager
         rvCommentList.adapter = issueAdapter
+        rvCommentList.isNestedScrollingEnabled = false
         issueAdapter.notifyDataSetChanged()
     }
 }

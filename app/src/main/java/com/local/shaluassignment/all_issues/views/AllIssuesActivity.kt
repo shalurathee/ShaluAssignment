@@ -2,33 +2,24 @@ package com.local.shaluassignment.all_issues.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.local.shaluassignment.R
 import com.local.shaluassignment.adapters.IssueListAdapter
 import com.local.shaluassignment.all_issues.viewmodels.IssuesViewModel
 import com.local.shaluassignment.issues_comments.views.CommentDetailActivity
 import com.local.shaluassignment.models.IssueListModel
 import com.local.shaluassignment.utils.ApiConstantsUrl
-import com.local.shaluassignment.utils.WebServicesCall
 import kotlinx.android.synthetic.main.activity_all_issues.*
 import kotlinx.android.synthetic.main.layout_header.*
-import java.lang.reflect.Type
-
 
 class AllIssuesActivity : AppCompatActivity() {
 
     lateinit var issueAdapter :IssueListAdapter
     lateinit var issueList : List<IssueListModel>
-
     lateinit var issuesViewModel :IssuesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +40,10 @@ class AllIssuesActivity : AppCompatActivity() {
         getAllIssueList()
     }
 
-    fun callCommentActivity(commentUrl:String){
+    fun callCommentActivity(commentUrl:String, issueDescription: String){
         val userProfileIntent = Intent(this,CommentDetailActivity::class.java)
         userProfileIntent.putExtra(ApiConstantsUrl.COMMENT_LIST, commentUrl)
+        userProfileIntent.putExtra(ApiConstantsUrl.ISSUE_DESCRIPTION, issueDescription)
         startActivity(userProfileIntent)
     }
 
@@ -79,8 +71,8 @@ class AllIssuesActivity : AppCompatActivity() {
     private fun setAdapter(){
         issueAdapter = IssueListAdapter( issueList,this, object :
             IssueListAdapter.BtnClickListener {
-            override fun commentListEvent(commentUrl: String) {
-                callCommentActivity(commentUrl)
+            override fun commentListEvent(commentUrl: String, issueDesc :String) {
+                callCommentActivity(commentUrl, issueDesc)
             }
 
         })

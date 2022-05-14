@@ -10,8 +10,9 @@ import com.local.shaluassignment.models.CommentListModel
 import kotlinx.android.synthetic.main.layout_comment_list.view.*
 import java.text.SimpleDateFormat
 
-class CommentDetailAdapter (private var list: List<CommentListModel>,
-                            var context: Context
+class CommentDetailAdapter(
+    private var list: List<CommentListModel>,
+    var context: Context
 ) : RecyclerView.Adapter<CommentDetailAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -27,9 +28,9 @@ class CommentDetailAdapter (private var list: List<CommentListModel>,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val commentItem = list[position]
-        holder.itemView.tvCommentDescription.text = "Issue Description : " + commentItem.commentDescription
+        holder.itemView.tvCommentDescription.text =
+            "Comment : " + commentItem.commentDescription
 
-        //Code for changing the date format
         val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         val formatter = SimpleDateFormat("mm-dd-yyyy")
         val output: String = formatter.format(parser.parse(commentItem.updatedAt?.toString()))
